@@ -14,5 +14,9 @@ export const routes = [
   {
     "name": "舞台预览",
     "route": "/preview"
+  },
+  {
+    "name": "执行单",
+    "route": "/sheets"
   }
 ] as const;

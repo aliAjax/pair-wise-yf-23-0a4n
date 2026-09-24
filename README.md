@@ -1,6 +1,14 @@
 # 舞台灯光编排模拟器
 
-纯前端舞台灯光编排工具，支持灯具通道、场景 Cue、时间轴预览和演出方案导出，所有数据存在 IndexedDB。
+纯前端舞台灯光编排工具，支持灯具通道、场景 Cue、时间轴预览和演出方案导出，所有数据存在浏览器（localStorage / IndexedDB）。
+
+## 执行单（/sheets）
+
+选择演出方案后逐场核对参与灯具的 DMX 起址、通道数与亮度，生成可交付的执行单：
+
+- 同一场次内两盏灯具的 DMX 占用区间（起址 ~ 起址+通道数-1）重叠，或场景引用了已停用（DISABLED）的灯具时，生成失败并逐条标出冲突；
+- 在「灯具布置」页修正 DMX 起址、通道数或灯具状态后重新生成，系统按场次指纹比对，只重算受影响的场次，已生成的场次条目保持原样；
+- 执行单与灯具改动均持久化在浏览器 localStorage（键：`stage-light.execution-sheets`、`stage-light.fixtures`），刷新不丢失。
 
 ## 快速启动
 
@@ -53,6 +61,8 @@ frontend/src/api, stores, types, constants, constructors, components/common, hoo
 - FixtureType: constants/FixtureType、types/FixtureType、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - CueStatus: constants/CueStatus、types/CueStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - ChannelMode: constants/ChannelMode、types/ChannelMode、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
+- FixtureStatus: constants/FixtureStatus、types/FixtureStatus、constructors/FixtureConstructor、statusText、hooks/useDmxAddressCheck、pages/FixturesPage、utils/dmxConflicts（停用灯具冲突检测）均有引用。
+- SheetStatus: constants/SheetStatus、types/SheetStatus、constructors/ExecutionSheetConstructor、statusText、api/ExecutionSheet、pages/ExecutionSheetPage 均有引用。
 
 ## 为什么会牵一发动全身
 

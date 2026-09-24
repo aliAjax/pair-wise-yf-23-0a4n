@@ -1,8 +1,12 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { findDmxOverlaps, type DmxOverlap } from "../utils/dmxConflicts";
+import type { Fixture } from "../types/Fixture";
 
-export function useDmxAddressCheck<T>(rows: T[] = []) {
-  const [page, setPage] = useState(1);
-  const pageSize = 8;
-  const pageRows = useMemo(() => rows.slice((page - 1) * pageSize, page * pageSize), [rows, page]);
-  return { page, setPage, pageSize, pageRows, total: rows.length };
+export function useDmxAddressCheck(fixtures: Fixture[] = []) {
+  const overlaps: DmxOverlap[] = useMemo(() => findDmxOverlaps(fixtures), [fixtures]);
+  const conflictedIds = useMemo(
+    () => new Set<number>(overlaps.flatMap((overlap) => [overlap.a.id, overlap.b.id])),
+    [overlaps]
+  );
+  return { overlaps, conflictedIds, hasConflict: overlaps.length > 0 };
 }
