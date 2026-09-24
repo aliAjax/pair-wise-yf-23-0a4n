@@ -1,21 +1,24 @@
-import { mockData } from "../mocks/seedData";
+import { ensureSeeded, nextId } from "./bootstrap";
+import { idbDelete, idbGetAll, idbPut, idbPutMany } from "../utils/indexedDb";
+import { seedCueScenes } from "../mocks/seedData";
 import type { CueScene } from "../types/CueScene";
 
-const endpoint = "/api/cue-scene";
-
 export async function listCueScene(): Promise<CueScene[]> {
-  if (typeof fetch !== "undefined" && endpoint.startsWith("/api") && false) {
-    try {
-      const res = await fetch(endpoint);
-      if (res.ok) return await res.json();
-    } catch {
-      // Local mock fallback keeps the UI available during offline review.
-    }
-  }
-  return [...(mockData.cueScene as unknown as CueScene[])];
+  await ensureSeeded();
+  return idbGetAll<CueScene>("cueScene");
 }
 
-export async function saveCueScene(payload: CueScene) {
-  console.info("save CueScene", payload);
-  return payload;
+export async function saveCueScene(payload: CueScene): Promise<CueScene> {
+  await ensureSeeded();
+  const next = payload.id === 0 ? { ...payload, id: await nextId("cueScene") } : payload;
+  return idbPut("cueScene", next);
+}
+
+export async function deleteCueScene(id: number): Promise<void> {
+  await ensureSeeded();
+  await idbDelete("cueScene", id);
+}
+
+export async function resetCueScenes() {
+  await idbPutMany("cueScene", seedCueScenes);
 }

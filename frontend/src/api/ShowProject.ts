@@ -1,21 +1,24 @@
-import { mockData } from "../mocks/seedData";
+import { ensureSeeded, nextId } from "./bootstrap";
+import { idbDelete, idbGetAll, idbPut, idbPutMany } from "../utils/indexedDb";
+import { seedShowProjects } from "../mocks/seedData";
 import type { ShowProject } from "../types/ShowProject";
 
-const endpoint = "/api/show-project";
-
 export async function listShowProject(): Promise<ShowProject[]> {
-  if (typeof fetch !== "undefined" && endpoint.startsWith("/api") && false) {
-    try {
-      const res = await fetch(endpoint);
-      if (res.ok) return await res.json();
-    } catch {
-      // Local mock fallback keeps the UI available during offline review.
-    }
-  }
-  return [...(mockData.showProject as unknown as ShowProject[])];
+  await ensureSeeded();
+  return idbGetAll<ShowProject>("showProject");
 }
 
-export async function saveShowProject(payload: ShowProject) {
-  console.info("save ShowProject", payload);
-  return payload;
+export async function saveShowProject(payload: ShowProject): Promise<ShowProject> {
+  await ensureSeeded();
+  const next = payload.id === 0 ? { ...payload, id: await nextId("showProject") } : payload;
+  return idbPut("showProject", next);
+}
+
+export async function deleteShowProject(id: number): Promise<void> {
+  await ensureSeeded();
+  await idbDelete("showProject", id);
+}
+
+export async function resetShowProjects() {
+  await idbPutMany("showProject", seedShowProjects);
 }

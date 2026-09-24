@@ -1,133 +1,147 @@
+import type { CueScene } from "../types/CueScene";
+import type { Fixture } from "../types/Fixture";
+import type { ShowProject } from "../types/ShowProject";
+import type { TimelineTrack } from "../types/TimelineTrack";
+
+export const seedFixtures: Fixture[] = [
+  {
+    id: 1,
+    fixture_code: "PAR-A01",
+    fixture_type: "PAR",
+    position_x: 18,
+    position_y: 72,
+    dmx_address: 1,
+    channel_count: 3,
+    color_mode: "RGB",
+    active: true
+  },
+  {
+    id: 2,
+    fixture_code: "WASH-B02",
+    fixture_type: "WASH",
+    position_x: 38,
+    position_y: 30,
+    dmx_address: 17,
+    channel_count: 4,
+    color_mode: "RGBW",
+    active: true
+  },
+  {
+    id: 3,
+    fixture_code: "BEAM-C03",
+    fixture_type: "BEAM",
+    position_x: 64,
+    position_y: 28,
+    dmx_address: 33,
+    channel_count: 6,
+    color_mode: "MOVING_HEAD",
+    active: true
+  },
+  {
+    id: 4,
+    fixture_code: "SPOT-D04",
+    fixture_type: "SPOT",
+    position_x: 82,
+    position_y: 70,
+    dmx_address: 65,
+    channel_count: 5,
+    color_mode: "MOVING_HEAD",
+    active: true
+  },
+  {
+    id: 5,
+    fixture_code: "STROBE-E05",
+    fixture_type: "STROBE",
+    position_x: 50,
+    position_y: 12,
+    dmx_address: 81,
+    channel_count: 1,
+    color_mode: "DIMMER_ONLY",
+    active: false
+  }
+];
+
+export const seedCueScenes: CueScene[] = [
+  {
+    id: 1,
+    name: "开场暖场",
+    fixture_states: {
+      "1": { brightness: 62, color: "#ffb15a" },
+      "2": { brightness: 48, color: "#ffe0a3" }
+    },
+    fade_in_ms: 2500,
+    hold_ms: 6000,
+    priority: 10,
+    scene_status: "READY"
+  },
+  {
+    id: 2,
+    name: "主唱定位",
+    fixture_states: {
+      "3": { brightness: 88, color: "#ffffff" },
+      "4": { brightness: 72, color: "#cfe8ff" }
+    },
+    fade_in_ms: 800,
+    hold_ms: 5000,
+    priority: 30,
+    scene_status: "READY"
+  },
+  {
+    id: 3,
+    name: "全员齐亮",
+    fixture_states: {
+      "1": { brightness: 92, color: "#ffffff" },
+      "2": { brightness: 84, color: "#e8f7ff" },
+      "3": { brightness: 76, color: "#ffffff" },
+      "4": { brightness: 90, color: "#fff7d6" }
+    },
+    fade_in_ms: 1200,
+    hold_ms: 4500,
+    priority: 40,
+    scene_status: "READY"
+  },
+  {
+    id: 4,
+    name: "检修频闪（停用）",
+    fixture_states: {
+      "5": { brightness: 35, color: "#ffffff" }
+    },
+    fade_in_ms: 200,
+    hold_ms: 1500,
+    priority: 20,
+    scene_status: "DISABLED"
+  }
+];
+
+export const seedTimelineTracks: TimelineTrack[] = [
+  { id: 1, cue_scene_id: 1, start_ms: 0, duration_ms: 8500, layer: 1, locked: false },
+  { id: 2, cue_scene_id: 2, start_ms: 8500, duration_ms: 5800, layer: 1, locked: true },
+  { id: 3, cue_scene_id: 3, start_ms: 14300, duration_ms: 5700, layer: 1, locked: false },
+  { id: 4, cue_scene_id: 4, start_ms: 20000, duration_ms: 1700, layer: 2, locked: false }
+];
+
+export const seedShowProjects: ShowProject[] = [
+  {
+    id: 1,
+    title: "周末主秀",
+    venue_name: "一号实验剧场",
+    fixture_ids: [1, 2, 3, 4],
+    track_ids: [1, 2, 3],
+    updated_at: "2026-09-24T09:00:00.000Z"
+  },
+  {
+    id: 2,
+    title: "带停用灯具的备份方案",
+    venue_name: "二号黑匣子",
+    fixture_ids: [1, 2, 3, 4, 5],
+    track_ids: [1, 4],
+    updated_at: "2026-09-24T09:30:00.000Z"
+  }
+];
+
 export const mockData = {
-  "fixture": [
-    {
-      "id": 1,
-      "fixture_code": "fixture code 1",
-      "fixture_type": "SPOT",
-      "position_x": "position x 1",
-      "position_y": "position y 1",
-      "dmx_address": "dmx address 1",
-      "channel_count": "channel count 1",
-      "color_mode": "color mode 1"
-    },
-    {
-      "id": 2,
-      "fixture_code": "fixture code 2",
-      "fixture_type": "WASH",
-      "position_x": "position x 2",
-      "position_y": "position y 2",
-      "dmx_address": "dmx address 2",
-      "channel_count": "channel count 2",
-      "color_mode": "color mode 2"
-    },
-    {
-      "id": 3,
-      "fixture_code": "fixture code 3",
-      "fixture_type": "BEAM",
-      "position_x": "position x 3",
-      "position_y": "position y 3",
-      "dmx_address": "dmx address 3",
-      "channel_count": "channel count 3",
-      "color_mode": "color mode 3"
-    }
-  ],
-  "cueScene": [
-    {
-      "id": 1,
-      "name": "name 1",
-      "fixture_states": "fixture states 1",
-      "fade_in_ms": "fade in ms 1",
-      "hold_ms": "hold ms 1",
-      "priority": "priority 1",
-      "scene_status": "READY"
-    },
-    {
-      "id": 2,
-      "name": "name 2",
-      "fixture_states": "fixture states 2",
-      "fade_in_ms": "fade in ms 2",
-      "hold_ms": "hold ms 2",
-      "priority": "priority 2",
-      "scene_status": "DISABLED"
-    },
-    {
-      "id": 3,
-      "name": "name 3",
-      "fixture_states": "fixture states 3",
-      "fade_in_ms": "fade in ms 3",
-      "hold_ms": "hold ms 3",
-      "priority": "priority 3",
-      "scene_status": "DRAFT"
-    }
-  ],
-  "timelineTrack": [
-    {
-      "id": 1,
-      "cue_scene_id": 1,
-      "start_ms": "start ms 1",
-      "duration_ms": "duration ms 1",
-      "layer": "layer 1",
-      "locked": "locked 1"
-    },
-    {
-      "id": 2,
-      "cue_scene_id": 2,
-      "start_ms": "start ms 2",
-      "duration_ms": "duration ms 2",
-      "layer": "layer 2",
-      "locked": "locked 2"
-    },
-    {
-      "id": 3,
-      "cue_scene_id": 3,
-      "start_ms": "start ms 3",
-      "duration_ms": "duration ms 3",
-      "layer": "layer 3",
-      "locked": "locked 3"
-    }
-  ],
-  "showProject": [
-    {
-      "id": 1,
-      "title": "title 1",
-      "venue_name": "venue name 1",
-      "fixture_ids": [
-        1,
-        2
-      ],
-      "track_ids": [
-        1,
-        2
-      ],
-      "updated_at": "2026-06-11T09:00:00Z"
-    },
-    {
-      "id": 2,
-      "title": "title 2",
-      "venue_name": "venue name 2",
-      "fixture_ids": [
-        1,
-        2
-      ],
-      "track_ids": [
-        1,
-        2
-      ],
-      "updated_at": "2026-06-12T09:00:00Z"
-    },
-    {
-      "id": 3,
-      "title": "title 3",
-      "venue_name": "venue name 3",
-      "fixture_ids": [
-        1,
-        2
-      ],
-      "track_ids": [
-        1,
-        2
-      ],
-      "updated_at": "2026-06-13T09:00:00Z"
-    }
-  ]
-} as const;
+  fixture: seedFixtures,
+  cueScene: seedCueScenes,
+  timelineTrack: seedTimelineTracks,
+  showProject: seedShowProjects
+};
